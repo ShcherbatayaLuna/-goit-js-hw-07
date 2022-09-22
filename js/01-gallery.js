@@ -4,7 +4,21 @@ const containerGallery = document.querySelector('.gallery');
 
 const cardsMarkup = createCardsImageMarkup(galleryItems);
 
+function createCardsImageMarkup(galleryItems) {
+  return galleryItems
+    .map(({ preview, original, description }) => {
+      return `
+        <div class="gallery__item">
+          <a class="gallery__link" href="${original}">
+            <img class="gallery__image" src="${preview}" alt="${description}" data-source="${original}">
+          </a>
+        </div>`;
+    })
+    .join('');
+}
+
 containerGallery.insertAdjacentHTML('beforeend', cardsMarkup);
+// containerGallery.innerHTML = cardsMarkup;
 
 containerGallery.addEventListener('click', event => {
   event.preventDefault();
@@ -16,21 +30,8 @@ containerGallery.addEventListener('click', event => {
   openInFullImage(event);
 });
 
-function createCardsImageMarkup(galleryItems) {
-  return galleryItems
-    .map(({ preview, original, description }) => {
-      return `
-        <div class="gallery__item">
-          <a class="gallery__link" href="${original}">
-              <img class="gallery__image" src="${preview}" alt="${description}" data-source="${original}">
-          </a>
-        </div>`;
-    })
-    .join('');
-}
-
 function openInFullImage(event) {
-  const imageSourceEl = event.target.getAttribute('data-source');
+  const imageSourceEl = event.target.dataset.source;
 
   const instance = basicLightbox.create(
     `<img src="${imageSourceEl}" width="800" height="600">`,
@@ -43,7 +44,6 @@ function openInFullImage(event) {
 
 function closeInFullImage(instance) {
   containerGallery.addEventListener('keydown', event => {
-    console.log(event.key);
     if (event.key === 'Escape') {
       instance.close();
     }
