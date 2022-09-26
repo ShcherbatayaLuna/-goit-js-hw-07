@@ -43,9 +43,10 @@ function openInFullImage(event) {
 }
 
 function closeInFullImage(instance) {
-  containerGallery.addEventListener('keydown', event => {
+  window.addEventListener('keydown', event => {
     if (event.key === 'Escape') {
       instance.close();
+      window.removeEventListener();
     }
   });
 }
